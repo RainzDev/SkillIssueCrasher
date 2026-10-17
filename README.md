@@ -2,6 +2,9 @@
 
 Crashes your game if you miss, do a bad cut, or hit a bomb
 
+[!NOTE]
+> This mod will also crash if played within multiplayer lobbies.
+
 ## Building
 
 For a full introduction to Quest modding, visit the [BSMG Wiki](https://bsmg.wiki/modding/quest/intro.html).
