@@ -8,7 +8,7 @@
       "name": "SkillIssueCrasher",
       "id": "skillissuecrasher",
       "version": "0.1.0",
-      "url": null,
+      "url": "https://github.com/RainzDev/SkillIssueCrasher",
       "additionalData": {
         "overrideSoName": "libskillissuecrasher.so",
         "cmake": true
