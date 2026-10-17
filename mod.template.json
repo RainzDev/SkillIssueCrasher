@@ -4,7 +4,7 @@
   "id": "${mod_id}",
   "version": "${version}",
   "author": "Jess",
-  "coverImage": "cover.gif",
+  "coverImage": "cover.webp",
   "packageId": "com.beatgames.beatsaber",
   "packageVersion": "1.40.8_7379",
   "description": "Crashes your game if you miss, do a bad cut, or hit a bomb",
