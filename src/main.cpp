@@ -6,6 +6,7 @@
 #include "beatsaber-hook/shared/utils/il2cpp-utils.hpp"
 #include "beatsaber-hook/shared/utils/il2cpp-type-check.hpp"
 #include "beatsaber-hook/shared/utils/hooking.hpp"
+#include "UnityEngine/Application.hpp"
 
 // Include dependency headers
 #include "scotland2/shared/modloader.h"
@@ -37,11 +38,11 @@ MAKE_HOOK_MATCH(ScoreController_HandleNoteWasCut, &GlobalNamespace::ScoreControl
         if (gameplayType == GlobalNamespace::NoteData::GameplayType::Bomb) {
             logger.info("Bomb hit!");
             delayed_task();
-            std::abort();
+            ::UnityEngine::Application::Quit();
         } else if (!cutInfo->get_allIsOK()) {
             logger.info("Bad cut! failReason=%d", static_cast<int>(cutInfo->get_failReason().value__));
             delayed_task();
-            std::abort();
+            ::UnityEngine::Application::Quit();
         }
     }
 
@@ -53,7 +54,7 @@ MAKE_HOOK_MATCH(ScoreController_HandleNoteWasMissed, &GlobalNamespace::ScoreCont
     GlobalNamespace::NoteController* noteController) {
     logger.info("Missed note!");
     delayed_task();
-    std::abort();
+    ::UnityEngine::Application::Quit();
 
     ScoreController_HandleNoteWasMissed(self, noteController);
 }
