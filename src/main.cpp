@@ -3,9 +3,7 @@
 
 #include <thread>
 
-#include "beatsaber-hook/shared/utils/il2cpp-utils.hpp"
-#include "beatsaber-hook/shared/utils/il2cpp-type-check.hpp"
-#include "beatsaber-hook/shared/utils/hooking.hpp"
+#include "beatsaber-hook/shared/hooking.hpp"
 #include "UnityEngine/Application.hpp"
 
 // Include dependency headers
@@ -31,16 +29,18 @@ static modloader::ModInfo modInfo{MOD_ID, VERSION, 0};
 MAKE_HOOK_MATCH(ScoreController_HandleNoteWasCut, &GlobalNamespace::ScoreController::HandleNoteWasCut, void,
     GlobalNamespace::ScoreController* self,
     GlobalNamespace::NoteController* noteController,
-    ByRef<GlobalNamespace::NoteCutInfo> cutInfo) {
-    if (cutInfo->noteData) {
-        const auto gameplayType = cutInfo->noteData->get_gameplayType();
+    ::by_ref<const GlobalNamespace::NoteCutInfo> cutInfo) {
+    auto mutableCutInfo = cutInfo.as_mutable();
+
+    if (mutableCutInfo->noteData) {
+        const auto gameplayType = mutableCutInfo->noteData->get_gameplayType();
 
         if (gameplayType == GlobalNamespace::NoteData::GameplayType::Bomb) {
             logger.info("Bomb hit!");
             delayed_task();
             ::UnityEngine::Application::Quit();
-        } else if (!cutInfo->get_allIsOK()) {
-            logger.info("Bad cut! failReason=%d", static_cast<int>(cutInfo->get_failReason().value__));
+        } else if (!mutableCutInfo->get_allIsOK()) {
+            logger.info("Bad cut! failReason=%d", static_cast<int>(mutableCutInfo->get_failReason().value__));
             delayed_task();
             ::UnityEngine::Application::Quit();
         }
