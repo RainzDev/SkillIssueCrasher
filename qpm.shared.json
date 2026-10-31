@@ -7,7 +7,7 @@
     "info": {
       "name": "SkillIssueCrasher",
       "id": "skillissuecrasher",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "url": "https://github.com/RainzDev/SkillIssueCrasher",
       "additionalData": {
         "overrideSoName": "libskillissuecrasher.so",
