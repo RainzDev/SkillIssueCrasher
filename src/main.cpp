@@ -52,9 +52,12 @@ MAKE_HOOK_MATCH(ScoreController_HandleNoteWasCut, &GlobalNamespace::ScoreControl
 MAKE_HOOK_MATCH(ScoreController_HandleNoteWasMissed, &GlobalNamespace::ScoreController::HandleNoteWasMissed, void,
     GlobalNamespace::ScoreController* self,
     GlobalNamespace::NoteController* noteController) {
-    logger.info("Missed note!");
-    delayed_task();
-    ::UnityEngine::Application::Quit();
+
+    if (!(noteController->noteData->get_gameplayType() == GlobalNamespace::NoteData::GameplayType::Bomb)) {
+        logger.info("Missed note!");
+        delayed_task();
+        ::UnityEngine::Application::Quit();
+    }
 
     ScoreController_HandleNoteWasMissed(self, noteController);
 }
