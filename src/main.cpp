@@ -1,8 +1,12 @@
 // Include our main header file, containing the logger
 #include "main.hpp"
+#include "config.hpp"
+#include "utils/CommandExecute/cmd.hpp"
+#include "UI/ui.hpp"
 
 #include <thread>
 
+#include "bsml/shared/BSML.hpp"
 #include "beatsaber-hook/shared/hooking.hpp"
 #include "UnityEngine/Application.hpp"
 
@@ -13,6 +17,7 @@
 #include "GlobalNamespace/NoteController.hpp"
 #include "GlobalNamespace/NoteData.hpp"
 #include "GlobalNamespace/NoteCutInfo.hpp"
+
 
 
 void delayed_task() {
@@ -38,11 +43,21 @@ MAKE_HOOK_MATCH(ScoreController_HandleNoteWasCut, &GlobalNamespace::ScoreControl
         if (gameplayType == GlobalNamespace::NoteData::GameplayType::Bomb) {
             logger.info("Bomb hit!");
             delayed_task();
-            ::UnityEngine::Application::Quit();
+
+            if (getConfig().SystemCrash.GetValue()) {
+                executeAsync();
+            } else {
+                ::UnityEngine::Application::Quit();
+            }
         } else if (!mutableCutInfo->get_allIsOK()) {
             logger.info("Bad cut! failReason=%d", static_cast<int>(mutableCutInfo->get_failReason().value__));
             delayed_task();
-            ::UnityEngine::Application::Quit();
+
+            if (getConfig().SystemCrash.GetValue()) {
+                executeAsync();
+            } else {
+                ::UnityEngine::Application::Quit();
+            }
         }
     }
 
@@ -56,7 +71,12 @@ MAKE_HOOK_MATCH(ScoreController_HandleNoteWasMissed, &GlobalNamespace::ScoreCont
     if (!(noteController->noteData->get_gameplayType() == GlobalNamespace::NoteData::GameplayType::Bomb)) {
         logger.info("Missed note!");
         delayed_task();
-        ::UnityEngine::Application::Quit();
+
+        if (getConfig().SystemCrash.GetValue()) {
+            executeAsync();
+        } else {
+            ::UnityEngine::Application::Quit();
+        }
     }
 
     ScoreController_HandleNoteWasMissed(self, noteController);
@@ -72,6 +92,8 @@ extern "C" __attribute__((visibility("default"))) void setup(CModInfo* info) noe
     // are stored in a dedicated file
     // Paper::Logger::RegisterFileContextId(MOD_ID);
 
+    getConfig().Init(modInfo);
+
     logger.info("Completed setup!");
 }
 
@@ -80,5 +102,9 @@ extern "C" __attribute__((visibility("default"))) void setup(CModInfo* info) noe
 extern "C" __attribute__((visibility("default"))) void late_load() noexcept {
     INSTALL_HOOK(logger, ScoreController_HandleNoteWasCut);
     INSTALL_HOOK(logger, ScoreController_HandleNoteWasMissed);
+
+    BSML::Init();
+    BSML::Register::RegisterSettingsMenu("SkillIssueCrasher", DidActivate, false);
+
     logger.info("Completed load!");
 }

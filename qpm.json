@@ -75,6 +75,31 @@
       "id": "bs-cordl",
       "versionRange": "^4503.0.0",
       "additionalData": {}
+    },
+    {
+      "id": "config-utils",
+      "versionRange": "^3.0.0",
+      "additionalData": {}
+    },
+    {
+      "id": "reflectcpp",
+      "versionRange": "^0.25.0",
+      "additionalData": {}
+    },
+    {
+      "id": "bsml",
+      "versionRange": "^0.6.7",
+      "additionalData": {}
+    },
+    {
+      "id": "custom-types",
+      "versionRange": "^0.21.2",
+      "additionalData": {}
+    },
+    {
+      "id": "metacore",
+      "versionRange": "^2.0.6",
+      "additionalData": {}
     }
   ]
 }
